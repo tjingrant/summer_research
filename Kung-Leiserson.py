@@ -1,3 +1,6 @@
+from prettytable import PrettyTable
+from Cell import Cell
+
 MEM_SQUARE_LEN = 10
 BOUNDARY_TO_IGNORE = 1
 SCAN_AREA_LEN = MEM_SQUARE_LEN - BOUNDARY_TO_IGNORE
@@ -24,21 +27,7 @@ b_matrix_p = [[0, 0, 3, 0, 0, 0, 0],
 			  [0, 0, 7, 0, 0, 3, 0],
 			  [0, 0, 0, 0, 1, 0, 0]]
 
-class Cell(object):
-	_a_in = 0
-	_b_in = 0
-	_c_in = 0
-	_a_out = 0
-	_b_out = 0
-	_c_out = 0
 
-	def __init__(self, a_in=0, b_in=0, c_in=0, a_out=0, b_out=0, c_out=0):
-		self._a_in = a_in
-		self._b_in = b_in
-		self._c_in = c_in
-		self._a_out = a_out
-		self._b_out = b_out
-		self._c_out = c_out
 
 step = 0
 
@@ -60,11 +49,14 @@ def print_interesting_square():
 		print line + "\n"
 
 def print_all_square():
+	table = PrettyTable(["", "1","2","3","4","5","6","7","8","9","10"])
+	table.padding_width = 1
 	for y in range(0, 10):
-		line = ""
+		line = [y+1]
 		for x in range(0, 10):
-			line = line + (str(systolic[x][y]._c_out) + "|" + str(systolic[x][y]._a_out) + "|" + str(systolic[x][y]._b_out) + " ")
-		print line + "\n"
+			line.append(str(systolic[x][y]._c_out) + "|" + str(systolic[x][y]._a_out) + "|" + str(systolic[x][y]._b_out) + " ")
+		table.add_row(line)
+	print table
 
 for x in range(5, 10):
 	for y in range(0, 7):
@@ -77,6 +69,8 @@ for x in range(0, 7):
 print_all_square()
 
 while(raw_input("continue?")!="quit"):
+	step += 1
+	print "step " + str(step)
 	systolic_new = [[Cell() for _ in range(MEM_SQUARE_LEN)] for _ in range(MEM_SQUARE_LEN)]
 	for x in range(1, 10):
 		for y in range(1, 10):
